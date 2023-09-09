@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search App</title>
+    <style>
+        .search-form {
+            width: 300px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .search-button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .search-button:hover {
+            background-color: #0056b3;
+        }
+
+        .search-results {
+            width: 80%;
+            text-align: left;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .search-result > div {
+            border: 1px solid #e5e5e5; 
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            transition: box-shadow 0.3s, border-color 0.3s;
+        }
+
+        .search-result > div:hover {
+            box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+            border-color: #007BFF;
+        }
+
+        .search-result h3 {
+            margin-top: 0;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .search-result p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Style for highlighted term */
+        .highlight {
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <form class="search-form" action="/" method="post">
+        <input class="search-input" type="text" name="search_term" placeholder="Enter search term" required>
+        <input class="search-button" type="submit" value="Search">
+    </form>
+
+    <div class="search-results">
+        {% if matches %}
+            <div class="search-result">
+                <h2>Search Results for: <span class="highlight">{{ request.form['search_term'] }}</span></h2>
+                {% for match in matches %}
+                    <div>
+                        <h3>{{ match.chapter }}, {{ match.page }}</h3>
+                        <!-- Using safe filter to render HTML tags -->
+                        <p>{{ match.content|safe }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
