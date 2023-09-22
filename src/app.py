@@ -8,6 +8,7 @@ with open('data.json', 'r') as file:
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    search_done = False
     matches = []
     if request.method == 'POST':
         term = request.form['search_term']
@@ -20,7 +21,7 @@ def index():
                         'page': page_num,
                         'content': highlighted_content
                     })
-    return render_template('index.html', matches=matches)
-
+        search_done = True
+    return render_template('index.html', matches=matches, search_done=search_done)
 if __name__ == '__main__':
     app.run(debug=True)
