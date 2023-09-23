@@ -6,17 +6,44 @@
     <title>Search App</title>
     <style>
 
-        /* Initial style for search form */
-        #search-form-initial {
-            position: absolute;
-            bottom: 50px;
-            left: 50%;
-            transform: translateX(-50%);
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center items vertically */
+            align-items: center;     /* Center items horizontally */
+            min-height: 100vh;         /*  100% of the viewport height */
         }
 
-        /* Style after search */
         #search-form-after {
-            /* No special styles needed, it will naturally flow to the top */
+            align-self: flex-start;  /* Align to the top of the container */
+            width: 100%;             /* Take up full width */
+            padding: 20px 0;         /* Add some padding to the top and bottom */
+        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* height: 100vh; 100% of the viewport height */
+        }
+
+        #search-form-initial .search-container {
+            justify-content: center;
+            align-items: center;
+            /*height: 100vh;  100% of the viewport height */
+        }
+
+        #search-form-after .search-container {
+            height: auto;
+        }
+
+        @keyframes borderColorTransition {
+            0% {
+                border-color: #2522CA; /* Initial blue color */
+            }
+            100% {
+                border-color: #E97451; /* Orange color from the submit button hover state */
+            }
         }
 
 
@@ -24,21 +51,22 @@
         .search-form {
             width: 300px;
             padding: 20px;
-            border: 1px solid #ccc;
-            margin: 0 auto;
+            border: 4px solid #2522CA;
+            animation: borderColorTransition 2s alternate infinite;
         }
 
+        
         .search-input {
             padding: 10px;
             width: 80%;
             margin-bottom: 10px;
-            border: 1px solid #ccc;
+            border: 1px solid #2522CA;
             border-radius: 4px;
         }
 
         .search-button {
             padding: 10px 15px;
-            background-color: #007BFF;
+            background-color: #2522CA;
             border: none;
             border-radius: 4px;
             color: white;
@@ -46,7 +74,7 @@
         }
 
         .search-button:hover {
-            background-color: #0056b3;
+            background-color: #E97451;
         }
 
         .search-results {
@@ -54,6 +82,7 @@
             text-align: left;
             margin: auto;
             padding: 20px;
+            flex: 1;
         }
 
         .search-result > div {
@@ -66,23 +95,25 @@
 
         .search-result > div:hover {
             box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
-            border-color: #007BFF;
+            border-color: #2522CA;
         }
 
         .search-result h3 {
             margin-top: 0;
             font-weight: 500;
             margin-bottom: 10px;
+            color: #000000;
+
         }
 
         .search-result p {
-            color: #666;
+            color: #2522CA;
             line-height: 1.6;
         }
 
         /* Style for highlighted term */
         .highlight {
-            background-color: yellow;
+            background-color: #E97451;
         }
 
         .loader-overlay {
@@ -102,7 +133,7 @@
         /* Circular Spinner Loader */
         .loader-spinner {
             border: 16px solid #f3f3f3;
-            border-top: 16px solid #007BFF;
+            border-top: 16px solid #2522CA;
             border-radius: 50%;
             width: 50px;
             height: 50px;
@@ -125,14 +156,18 @@
     </style>
 </head>
 <body>
-    <form class="search-form" action="/" method="post" id="{{ 'search-form-initial' if not search_done else 'search-form-after' }}">
-        <input class="search-input" type="text" name="search_term" placeholder="Enter search term" value="{{ request.form['search_term'] }}" required>
-        <input class="search-button" type="submit" value="Search">
-    </form>
-    
 
-    <div class="search-results">
-        {% if matches %}
+    <div class="main-container">
+        <div class="search-container" id="{{ 'search-form-initial' if not search_done else 'search-form-after' }}">
+            <form class="search-form" action="/" method="post">
+                <input class="search-input" type="text" name="search_term" placeholder="Enter search term" value="{{ request.form['search_term'] }}" required>
+                <input class="search-button" type="submit" value="Search">
+            </form>
+        </div>
+        
+
+        <div class="search-results">
+            {% if matches %}
             <div class="search-result">
                 <h2>{{ matches|length }} Search Results for: <span class="highlight">{{ request.form['search_term'] }}</span></h2>
                 {% for match in matches %}
@@ -143,15 +178,16 @@
                     </div>
                 {% endfor %}
             </div>
-        {% else %}
+        {% elif search_done %}
             <p>No results found for <span class="highlight">{{ request.form['search_term'] }}</span>.</p>
         {% endif %}
-
+        
+        </div>
     </div>
+
     <div class="loader-overlay" id="loaderOverlay">
         <!-- Circular Spinner Loader -->
         <div class="loader loader-spinner" id="loaderSpinner"></div>
-
     </div>
 
     <!-- JavaScript -->
@@ -171,5 +207,6 @@
         startLoading();
     </script>
 </body>
+
 
 </html>
