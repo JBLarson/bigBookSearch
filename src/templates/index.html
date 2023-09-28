@@ -88,8 +88,7 @@
             <div class="search-results">
                 {% for page_num in matched_pages %}
                     <div>
-                        <h3>Page: {{ page_num }}</h3>
-                        <!-- Embed PDF.js viewer to display only the specific page -->
+                        <h3>Page: {{ page_num|int - 21 }}</h3>                        <!-- Embed PDF.js viewer to display only the specific page -->
                         <!-- Configure PDF.js to load only the specific page and highlight the search term -->
                         <iframe src="/static/web/viewer.html?file=/static/bigBook.pdf#page={{ page_num }}&search={{ search_term }}" width="600" height="800"></iframe>
                     </div>
