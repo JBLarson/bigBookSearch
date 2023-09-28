@@ -4,4 +4,4 @@
 
 ### Useful for meeting preparation and independent research
 
-![bbSearchV003](https://github.com/JBLarson/bigBookSearch/blob/main/bbSearch_v003.png "bbSearchv003")
+![bbSearchV005](https://github.com/JBLarson/bigBookSearch/blob/main/bbSearch_v005.png "bbSearchv005")
